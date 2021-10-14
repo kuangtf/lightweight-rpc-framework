@@ -15,16 +15,21 @@ import lombok.extern.slf4j.Slf4j;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+/**
+ * @author github.com/kuangtf
+ * @date 2021/10/14 17:22
+ * 服务端代理类
+ */
 @Slf4j
 public class ClientStubInvocationHandler implements InvocationHandler {
 
-    private DiscoveryService discoveryService;
+    private final DiscoveryService discoveryService;
 
-    private RpcClientProperties properties;
+    private final RpcClientProperties properties;
 
-    private Class<?> calzz;
+    private final Class<?> calzz;
 
-    private String version;
+    private final String version;
 
     public ClientStubInvocationHandler(DiscoveryService discoveryService, RpcClientProperties properties, Class<?> calzz, String version) {
         super();

@@ -4,6 +4,11 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * @author github.com/kuangtf
+ * @date 2021/10/14 17:22
+ * 封装的一个服务信息相关的实体类，用于服务注册
+ */
 @Data
 public class ServiceInfo implements Serializable {
 

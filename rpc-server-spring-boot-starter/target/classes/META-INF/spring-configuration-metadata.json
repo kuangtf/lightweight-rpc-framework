@@ -17,8 +17,7 @@
       "name": "rpc.server.port",
       "type": "java.lang.Integer",
       "description": "服务启动端口",
-      "sourceType": "com.ktf.rpc.server.config.RpcServerProperties",
-      "defaultValue": 8090
+      "sourceType": "com.ktf.rpc.server.config.RpcServerProperties"
     },
     {
       "name": "rpc.server.registry-addr",

@@ -7,11 +7,11 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 /**
+ * @author github.com/kuangtf
+ * @date 2021/10/14 17:22
  * 轮询算法
  */
 public class FullRoundBalance implements LoadBalance {
-
-    private static final Logger logger = LoggerFactory.getLogger(FullRoundBalance.class);
 
     private int index;
 
@@ -21,6 +21,6 @@ public class FullRoundBalance implements LoadBalance {
         if (index >= services.size()) {
             index = 0;
         }
-        return services.get(index++);
+        return services.get(index ++);
     }
 }

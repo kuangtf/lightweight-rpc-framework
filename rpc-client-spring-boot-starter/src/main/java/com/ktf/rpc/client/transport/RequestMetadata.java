@@ -8,7 +8,9 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- *  请求元数据
+ * @author github.com/kuangtf
+ * @date 2021/10/14 17:22
+ * 请求元数据
  */
 @Data
 @Builder

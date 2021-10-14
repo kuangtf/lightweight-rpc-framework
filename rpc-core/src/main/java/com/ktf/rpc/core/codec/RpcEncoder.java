@@ -11,9 +11,12 @@ import io.netty.handler.codec.MessageToByteEncoder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
- *  编码器
+ * @author github.com/kuangtf
+ * @date 2021/10/14 17:22
+ * 自定义编码器
  */
 @Slf4j
 public class RpcEncoder<T> extends MessageToByteEncoder<MessageProtocol<T>> {
@@ -21,22 +24,19 @@ public class RpcEncoder<T> extends MessageToByteEncoder<MessageProtocol<T>> {
     /**
      *
      *  +---------------------------------------------------------------+
-     *  | 魔数 2byte | 协议版本号 1byte | 序列化算法 1byte | 报文类型 1byte|
+     *  | 魔数 2byte | 协议版本号 1byte | 序列化算法 1byte | 报文类型 1byte    |
      *  +---------------------------------------------------------------+
-     *  | 状态 1byte |        消息 ID 32byte     |      数据长度 4byte    |
+     *  | 状态 1byte |        消息 ID 32byte     |      数据长度 4byte     |
      *  +---------------------------------------------------------------+
-     *  |                   数据内容 （长度不定）                         |
+     *  |                   数据内容 （长度不定）                           |
      *  +---------------------------------------------------------------+
      *
-     *
-     * @param channelHandlerContext
-     * @param messageProtocol
-     * @param byteBuf
-     * @throws Exception
      */
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, MessageProtocol<T> messageProtocol, ByteBuf byteBuf) throws Exception {
+        // 获取消息头
         MessageHeader header = messageProtocol.getHeader();
+
         // 魔数
         byteBuf.writeShort(header.getMagic());
 
@@ -53,8 +53,9 @@ public class RpcEncoder<T> extends MessageToByteEncoder<MessageProtocol<T>> {
         byteBuf.writeByte(header.getStatus());
 
         // 消息 ID
-        byteBuf.writeCharSequence(header.getRequestId(), Charset.forName("UTF-8"));
+        byteBuf.writeCharSequence(header.getRequestId(), StandardCharsets.UTF_8);
 
+        // 根据消息头中的序列化算法选择对应的序列化方式对消息体进行序列化
         RpcSerialization rpcSerialization = SerializationFactory.getRpcSerialization(SerializationTypeEnum.parseByType(header.getSerialization()));
         byte[] data = rpcSerialization.serialize(messageProtocol.getBody());
 

@@ -1,14 +1,14 @@
 package com.ktf.rpc.client.annotation;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.lang.annotation.*;
 
-
+/**
+ * @author github.com/kuangtf
+ * @date 2021/10/14 17:22
+ */
 @Target({ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Autowired
 public @interface RpcAutowired {
 
     /**

@@ -1,1 +1,2 @@
+# 自动装配
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.ktf.rpc.server.config.RpcServerAutoConfiguration

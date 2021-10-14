@@ -5,6 +5,7 @@ import com.ktf.rpc.client.config.RpcClientProperties;
 import com.ktf.rpc.client.proxy.ClientStubProxyFactory;
 import com.ktf.rpc.core.discovery.DiscoveryService;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -15,17 +16,22 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
 /**
- * bean 后置处理器 获取所有bean
- * 判断bean字段是否被 {@link com.ktf.rpc.client.annotation.RpcAutowired } 注解修饰
+ * @author github.com/kuangtf
+ * @date 2021/10/13 21:35
+ * bean 后置处理器 获取所有 bean
+ * 判断 bean 字段是否被 {@link com.ktf.rpc.client.annotation.RpcAutowired } 注解修饰
  * 动态修改被修饰字段的值为代理对象 {@link ClientStubProxyFactory}
  */
 public class RpcClientProcessor implements BeanFactoryPostProcessor, ApplicationContextAware {
 
-    private ClientStubProxyFactory clientStubProxyFactory;
+    @Autowired
+    private final ClientStubProxyFactory clientStubProxyFactory;
 
-    private DiscoveryService discoveryService;
+    @Autowired
+    private final DiscoveryService discoveryService;
 
-    private RpcClientProperties properties;
+    @Autowired
+    private final RpcClientProperties properties;
 
     private ApplicationContext applicationContext;
 

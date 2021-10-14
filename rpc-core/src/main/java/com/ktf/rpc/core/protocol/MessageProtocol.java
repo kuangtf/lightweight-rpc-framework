@@ -5,7 +5,9 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- *  消息协议
+ * @author github.com/kuangtf
+ * @date 2021/10/14 17:22
+ * 消息协议
  */
 @Data
 public class MessageProtocol<T> implements Serializable {
@@ -16,7 +18,7 @@ public class MessageProtocol<T> implements Serializable {
     private MessageHeader header;
 
     /**
-     *  消息体
+     *  消息体，就是请求或响应的数据
      */
     private T body;
 

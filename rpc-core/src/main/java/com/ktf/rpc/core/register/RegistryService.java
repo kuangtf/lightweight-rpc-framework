@@ -5,7 +5,9 @@ import com.ktf.rpc.core.common.ServiceInfo;
 import java.io.IOException;
 
 /**
- * 服务注册发现
+ * @author github.com/kuangtf
+ * @date 2021/10/14 17:22
+ * 服务注册
  */
 public interface RegistryService {
 

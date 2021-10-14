@@ -7,7 +7,9 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- *  消息头
+ * @author github.com/kuangtf
+ * @date 2021/10/14 17:22
+ * 消息头
  */
 @Data
 public class MessageHeader implements Serializable {
@@ -54,7 +56,9 @@ public class MessageHeader implements Serializable {
      */
     private int msgLen;
 
-
+    /**
+     * 构建消息头
+     */
     public static MessageHeader build(String serialization){
         MessageHeader messageHeader = new MessageHeader();
         messageHeader.setMagic(ProtocolConstants.MAGIC);

@@ -4,15 +4,14 @@ import com.ktf.rpc.core.common.RpcResponse;
 import com.ktf.rpc.core.protocol.MessageProtocol;
 
 /**
- *  网络传输层
+ * @author github.com/kuangtf
+ * @date 2021/10/14 17:22
+ * 网络传输层
  */
 public interface NetClientTransport {
 
     /**
      *  发送数据
-     * @param metadata
-     * @return
-     * @throws Exception
      */
     MessageProtocol<RpcResponse> sendRequest(RequestMetadata metadata) throws Exception;
 

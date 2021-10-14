@@ -19,13 +19,17 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author github.com/kuangtf
+ * @date 2021/10/14 17:22
+ * 客户端传输层
+ */
 @Slf4j
 public class NettyNetClientTransport implements NetClientTransport {
 
     private final Bootstrap bootstrap;
     private final EventLoopGroup eventLoopGroup;
     private final RpcResponseHandler handler;
-
 
     public NettyNetClientTransport() {
         bootstrap = new Bootstrap();
@@ -36,7 +40,6 @@ public class NettyNetClientTransport implements NetClientTransport {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         socketChannel.pipeline()
-
                                 // 解码 是入站操作 将二进制解码成消息
                                 .addLast(new RpcDecoder())
                                 // 接收响应 入站操作
@@ -49,12 +52,16 @@ public class NettyNetClientTransport implements NetClientTransport {
 
     @Override
     public MessageProtocol<RpcResponse> sendRequest(RequestMetadata metadata) throws Exception {
+        // 请求的消息协议类型
         MessageProtocol<RpcRequest> protocol = metadata.getProtocol();
+        // 异步返回结果
         RpcFuture<MessageProtocol<RpcResponse>> future = new RpcFuture<>();
+        // 将请求 id 和对应的异步返回结果缓存起来
         LocalRpcResponseCache.add(protocol.getHeader().getRequestId(), future);
 
-        // TCP 连接
+        // 使用 netty 连接到服务端
         ChannelFuture channelFuture = bootstrap.connect(metadata.getAddress(), metadata.getPort()).sync();
+        // 添加回调函数，在连接之后执行
         channelFuture.addListener((ChannelFutureListener) arg0 -> {
             if (channelFuture.isSuccess()) {
                 log.info("connect rpc server {} on port {} success.", metadata.getAddress(), metadata.getPort());
@@ -64,8 +71,9 @@ public class NettyNetClientTransport implements NetClientTransport {
                 eventLoopGroup.shutdownGracefully();
             }
         });
-        // 写入数据
+        // 将数据发送给服务端
         channelFuture.channel().writeAndFlush(protocol);
+        // 异步获取响应
         return metadata.getTimeout() != null ? future.get(metadata.getTimeout(), TimeUnit.MILLISECONDS) : future.get();
     }
 }

@@ -4,6 +4,11 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * @author github.com/kuangtf
+ * @date 2021/10/14 17:22
+ * 封装的请求实体类
+ */
 @Data
 public class RpcRequest implements Serializable {
 

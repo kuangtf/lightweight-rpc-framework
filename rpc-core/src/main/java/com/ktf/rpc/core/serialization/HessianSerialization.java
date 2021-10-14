@@ -6,13 +6,15 @@ import com.caucho.hessian.io.HessianSerializerOutput;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
+/**
+ * @author github.com/kuangtf
+ * @date 2021/10/14 17:22
+ * Hessian 序列化方式的实现类（默认）
+ */
 public class HessianSerialization implements RpcSerialization {
 
     /**
-     *  序列化
-     * @param object
-     * @param <T>
-     * @return
+     * 序列化
      */
     @Override
     public <T> byte[] serialize(T object) {
@@ -36,10 +38,6 @@ public class HessianSerialization implements RpcSerialization {
 
     /**
      *  反序列化
-     * @param bytes
-     * @param clz
-     * @param <T>
-     * @return
      */
     @SuppressWarnings("unchecked")
     @Override

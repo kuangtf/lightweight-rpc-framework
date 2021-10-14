@@ -1,7 +1,12 @@
 package com.ktf.rpc.client.config;
 
 import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * @author github.com/kuangtf
+ * @date 2021/10/13 21:35
+ */
 @Data
 public class RpcClientProperties {
 

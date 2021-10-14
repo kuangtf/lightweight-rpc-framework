@@ -15,7 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetAddress;
 
-
+/**
+ * @author github.com/kuangtf
+ * @date 2021/10/14 17:22
+ * 服务端传输
+ */
 @Slf4j
 public class NettyRpcServer implements RpcServer {
 
@@ -25,6 +29,7 @@ public class NettyRpcServer implements RpcServer {
         EventLoopGroup worker = new NioEventLoopGroup();
 
         try {
+            // 获取本地网络地址
             String serverAddress = InetAddress.getLocalHost().getHostAddress();
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(boss, worker)
@@ -34,13 +39,14 @@ public class NettyRpcServer implements RpcServer {
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             socketChannel.pipeline()
                                     // 协议编码
-                                    .addLast(new RpcEncoder())
+                                    .addLast(new RpcEncoder<>())
                                     // 协议解码
                                     .addLast(new RpcDecoder())
                                     // 请求处理器
                                     .addLast(new RpcRequestHandler());
                         }
                     })
+                    //使用 TCP 协议层面的 keepalive（保活） 机制，实现心跳机制
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
 
             ChannelFuture channelFuture = bootstrap.bind(serverAddress, port).sync();
