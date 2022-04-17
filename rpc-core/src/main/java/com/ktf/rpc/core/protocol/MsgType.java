@@ -9,11 +9,20 @@ import lombok.Getter;
  */
 public enum MsgType {
 
-    // 请求消息
+    /**
+     * 请求消息
+     */
     REQUEST((byte) 1),
 
-    // 响应消息
-    RESPONSE((byte) 2);
+    /**
+     * 响应消息
+      */
+    RESPONSE((byte) 2),
+
+    /**
+     * 心跳消息
+     */
+    HEARTBEAT((byte) 3);
 
     @Getter
     private final byte type;

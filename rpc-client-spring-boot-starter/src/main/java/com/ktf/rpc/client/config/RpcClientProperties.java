@@ -1,13 +1,16 @@
 package com.ktf.rpc.client.config;
 
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 /**
  * @author github.com/kuangtf
  * @date 2021/10/13 21:35
  */
 @Data
+@ConfigurationProperties(prefix = "rpc.client")
 public class RpcClientProperties {
 
     /**
@@ -23,7 +26,7 @@ public class RpcClientProperties {
     /**
      *  服务发现地址
      */
-    private String discoveryAddr = "127.0.0.1:2181";
+    private String discoveryAddr;
 
     /**
      *  服务调用超时

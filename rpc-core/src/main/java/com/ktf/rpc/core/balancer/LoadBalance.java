@@ -10,5 +10,10 @@ import java.util.List;
  */
 public interface LoadBalance {
 
+    /**
+     * 选择一个服务
+     * @param services 服务列表
+     * @return 按照一定的规则选中的服务
+     */
     ServiceInfo chooseOne(List<ServiceInfo> services);
 }

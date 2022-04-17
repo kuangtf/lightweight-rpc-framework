@@ -9,7 +9,6 @@ import org.springframework.context.annotation.ComponentScan;
  * @date 2021/10/14 17:22
  */
 @SpringBootApplication
-@ComponentScan("com.ktf.rpc")
 public class ProviderApplication {
 
     public static void main(String[] args) {

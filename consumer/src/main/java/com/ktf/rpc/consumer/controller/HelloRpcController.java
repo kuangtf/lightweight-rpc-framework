@@ -4,6 +4,7 @@ import com.ktf.rpc.api.service.HelloRpcService;
 import com.ktf.rpc.client.annotation.RpcAutowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -12,15 +13,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @date 2021/10/14 17:22
  */
 @Controller
+@RequestMapping("/rpc")
 public class HelloRpcController {
 
-    @RpcAutowired(version = "2.0")
-    HelloRpcService helloRpcService;
+    @RpcAutowired
+    private HelloRpcService helloRpcService;
 
-    @GetMapping("/hello/rpc")
+    @GetMapping("/hello")
     @ResponseBody
     public String helloRpcService(@RequestParam("name") String name){
-        return  helloRpcService.sayHello(name);
+        return helloRpcService.sayHello(name);
     }
 
 }

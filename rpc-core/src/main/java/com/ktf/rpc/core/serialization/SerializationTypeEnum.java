@@ -7,13 +7,32 @@ import lombok.Getter;
  * @date 2021/10/14 17:22
  * 序列化算法枚举类，由消息头设置
  */
-public enum  SerializationTypeEnum {
+public enum SerializationTypeEnum {
 
-    // 0 代表使用 HESSIAN 序列化，默认
+    /**
+     * 0 代表使用 HESSIAN 序列化，默认
+     */
     HESSIAN((byte) 0),
 
-    // 1 代表使用 JSON 序列化
-    JSON((byte) 1);
+    /**
+     * 1 代表使用 JSON 序列化
+     */
+    JSON((byte) 1),
+
+    /**
+     * 2 代表使用 Protostuff 序列化
+     */
+    PROTOSTUFF((byte) 2),
+
+    /**
+     * 3 代表使用 KRYO 序列化
+     */
+    KRYO((byte) 3),
+
+    /**
+     * xml 序列化方式
+     */
+    XML((byte) 4);
 
     @Getter
     private final byte type;
@@ -31,7 +50,7 @@ public enum  SerializationTypeEnum {
                 return typeEnum;
             }
         }
-        return HESSIAN;
+        return PROTOSTUFF;
     }
 
     /**
@@ -43,7 +62,7 @@ public enum  SerializationTypeEnum {
                 return typeEnum;
             }
         }
-        return HESSIAN;
+        return PROTOSTUFF;
     }
 
 }

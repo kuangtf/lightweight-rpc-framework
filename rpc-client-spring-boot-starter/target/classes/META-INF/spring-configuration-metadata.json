@@ -1,0 +1,36 @@
+{
+  "groups": [
+    {
+      "name": "rpc.client",
+      "type": "com.ktf.rpc.client.config.RpcClientProperties",
+      "sourceType": "com.ktf.rpc.client.config.RpcClientProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "rpc.client.balance",
+      "type": "java.lang.String",
+      "description": "负载均衡",
+      "sourceType": "com.ktf.rpc.client.config.RpcClientProperties"
+    },
+    {
+      "name": "rpc.client.discovery-addr",
+      "type": "java.lang.String",
+      "description": "服务发现地址",
+      "sourceType": "com.ktf.rpc.client.config.RpcClientProperties"
+    },
+    {
+      "name": "rpc.client.serialization",
+      "type": "java.lang.String",
+      "description": "序列化",
+      "sourceType": "com.ktf.rpc.client.config.RpcClientProperties"
+    },
+    {
+      "name": "rpc.client.timeout",
+      "type": "java.lang.Integer",
+      "description": "服务调用超时",
+      "sourceType": "com.ktf.rpc.client.config.RpcClientProperties"
+    }
+  ],
+  "hints": []
+}

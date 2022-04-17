@@ -9,10 +9,14 @@ import lombok.Getter;
  */
 public enum MsgStatus {
 
-    // 请求成功
+    /**
+     * 请求成功
+     */
     SUCCESS((byte)0),
 
-    // 请求失败
+    /**
+     * 请求失败
+     */
     FAIL((byte)1);
 
     @Getter

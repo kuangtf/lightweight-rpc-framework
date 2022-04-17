@@ -12,11 +12,6 @@ import java.io.Serializable;
 @Data
 public class ServiceInfo implements Serializable {
 
-	/**
-     *  应用名称
-	 */
-	private String appName;
-
     /**
      *  服务名称
 	 */

@@ -14,7 +14,7 @@ import java.util.List;
  * 取第一个
  */
 @Slf4j
-@Component
+//@Component
 public class FirstLoadBalance implements LoadBalance {
 
     /**

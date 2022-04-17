@@ -17,22 +17,22 @@ import java.io.Serializable;
 public class RequestMetadata implements Serializable {
 
     /**
-     *  协议
+     *  请求格式
      */
     private MessageProtocol<RpcRequest> protocol;
 
     /**
-     *  地址
+     *  请求服务的地址
      */
     private String address;
 
     /**
-     *  端口
+     *  请求服务的端口
      */
     private Integer port;
 
     /**
-     *  服务调用超时
+     *  服务调用超时时间
      */
     private Integer timeout;
 

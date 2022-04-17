@@ -10,12 +10,12 @@ import java.util.Random;
  * @date 2021/10/14 17:22
  * 随机算法
  */
-public class RandomBalance implements LoadBalance{
+public class RandomBalance implements LoadBalance {
 
-    private static final Random random = new Random();
+    private static final Random RANDOM = new Random();
 
     @Override
     public ServiceInfo chooseOne(List<ServiceInfo> services) {
-        return services.get(random.nextInt(services.size()));
+        return services.get(RANDOM.nextInt(services.size()));
     }
 }

@@ -4,7 +4,7 @@
 
 ## 基本结构
 
-![](https://gitee.com/kuangtf/blogImage/raw/master/img/rpc.jpg)
+<img src="https://cdn.jsdelivr.net/gh/kuangtf/PictureBed/img/image-20220417150428015.png" alt="image-20220417150428015" style="zoom:80%;" />
 
 RPC 框架包含三个最重要的组件，分别是客户端、服务端和注册中心。在一次 RPC 调用流程中，这三个组件是这样交互的：
 
@@ -104,13 +104,13 @@ public class FirstLoadBalance implements LoadBalance {
 
 #### 4.1自定义消息协议 
 
-+----------------------------------------------------------------------------+ 
++---------------------------------------------------------------------------------------+ 
 | 魔数 2byte | 协议版本号 1byte | 序列化算法 1byte | 报文类型 1byte | 
-+----------------------------------------------------------------------------+ 
-|       状态 1byte     |        消息 ID 32byte     |      数据长度 4byte         |
-+----------------------------------------------------------------------------+ 
-|                                   数据内容 （长度不定）                                     | 
-+----------------------------------------------------------------------------+ 
++---------------------------------------------------------------------------------------+ 
+|       状态 1byte      |        消息 ID 32byte       |      数据长度 4byte               |
++---------------------------------------------------------------------------------------+ 
+|                                   数据内容 （长度不定）                                                   | 
++---------------------------------------------------------------------------------------+ 
 
  - 魔数：魔数是通信双方协商的一个暗号，通常采用固定的几个字节表示。魔数的作用是防止任何人随便向服务器的端口上发送数据。
       - 例如 java Class 文件开头就存储了魔数 0xCAFEBABE，在加载 Class 文件时首先会验证魔数的正确性
@@ -137,7 +137,7 @@ public class FirstLoadBalance implements LoadBalance {
 - TCP 传输协议是面向流的，没有数据包界限，也就是说消息无边界。客户端向服务端发送数据时，可能将一个完整的报文拆分成多个小报文进行发送，也可能将多个报文合并成一个大的报文进行发送。 因此就有了拆包和粘包。在网络通信的过程中，每次可以发送的数据包大小是受多种因素限制的，如 MTU 传输单元大小、滑动窗口等。 所以如果一次传输的网络包数据大小超过传输单元大小，那么我们的数据可能会拆分为多个数据包发送出去。如果每次请求的网络包数据都很小，比如一共请求了 10000 次，TCP 并不会分别发送 10000 次。 TCP采用的 Nagle（批量发送，主要用于解决频繁发送小数据包而带来的网络拥塞问题） 算法对此作出了优化。
 
 所以，网络传输会出现这样： 
-<img src="https://gitee.com/kuangtf/blogImage/raw/master/img/tcp_package.png" style="zoom: 67%;" />
+<img src="https://cdn.jsdelivr.net/gh/kuangtf/PictureBed/img/image-20220417150546300.png" alt="image-20220417150546300" style="zoom:80%;" />
 
 1. 服务端恰巧读到了两个完整的数据包 A 和 B，没有出现拆包/粘包问题；
 2.  服务端接收到 A 和 B 粘在一起的数据包，服务端需要解析出 A 和 B； 
@@ -155,7 +155,7 @@ public class FirstLoadBalance implements LoadBalance {
 - 消息长度 + 消息内容 
     消息长度 + 消息内容是项目开发中最常用的一种协议，接收方根据消息长度来读取消息内容。    
 
-<img src="https://gitee.com/kuangtf/blogImage/raw/master/img/tcpStickybagUnpacking.png" style="zoom: 60%;" />
+<img src="https://cdn.jsdelivr.net/gh/kuangtf/PictureBed/img/image-20220417150558339.png" alt="image-20220417150558339" style="zoom:67%;" />
 
 本项目如何解决的？
 
@@ -187,10 +187,10 @@ public class FirstLoadBalance implements LoadBalance {
 
 序列化性能：
 - 空间上 
-    <img src="https://gitee.com/kuangtf/blogImage/raw/master/img/serialization_space.png" style="zoom: 67%;" />
+    <img src="https://cdn.jsdelivr.net/gh/kuangtf/PictureBed/img/image-20220417150619743.png" alt="image-20220417150619743" style="zoom:80%;" />
 
 - 时间上 
-    <img src="https://gitee.com/kuangtf/blogImage/raw/master/img/serialization_time.png" style="zoom:67%;" />
+    <img src="https://cdn.jsdelivr.net/gh/kuangtf/PictureBed/img/image-20220417150634843.png" alt="image-20220417150634843" style="zoom:80%;" />
 
 ### 6.网络传输，使用netty 
 
@@ -219,19 +219,19 @@ bootstrap.group(eventLoopGroup).channel(NioSocketChannel.class)
 - Sync 同步调用
 
     客户端线程发起 RPC 调用后，当前线程会一直阻塞，直至服务端返回结果或者处理超时异常。
-    ![](https://gitee.com/kuangtf/blogImage/raw/master/img/sync.png)
+    <img src="https://cdn.jsdelivr.net/gh/kuangtf/PictureBed/img/image-20220417150700493.png" alt="image-20220417150700493" style="zoom:80%;" />
 
 - Future 异步调用 
     客户端发起调用后不会再阻塞等待，而是拿到 RPC 框架返回的 Future 对象，调用结果会被服务端缓存，客户端自行决定后续何时获取返回结果，当客户端主动获取结果时，该过程是阻塞等待的。
-    ![](https://gitee.com/kuangtf/blogImage/raw/master/img/future.png)
+    <img src="https://cdn.jsdelivr.net/gh/kuangtf/PictureBed/img/image-20220417150718419.png" alt="image-20220417150718419" style="zoom:80%;" />
     
 - Callback 回调调用
     客户端发起调用时，将 Callback 对象传递给 RPC 框架，无须同步等待返回结果，直接返回。当获取到服务端响应结果或者超时异常后，再执行用户注册的 Callback 回调。
-    ![](https://gitee.com/kuangtf/blogImage/raw/master/img/callback.png)
+    <img src="https://cdn.jsdelivr.net/gh/kuangtf/PictureBed/img/image-20220417150728870.png" alt="image-20220417150728870" style="zoom:80%;" />
 
 - Oneway 单向调用
     客户端发起请求之后直接返回，忽略返回结果。
-    ![](https://gitee.com/kuangtf/blogImage/raw/master/img/oneway.png)
+    <img src="https://cdn.jsdelivr.net/gh/kuangtf/PictureBed/img/image-20220417150745235.png" alt="image-20220417150745235" style="zoom:80%;" />
 
 > 本项目使用的是第一种：客户端同步调用，其他的没有实现。逻辑在 RpcFuture 中，使用 CountDownLatch 实现阻塞等待（超时等待）。
 

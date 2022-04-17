@@ -19,6 +19,12 @@ public class SerializationFactory {
                 return new HessianSerialization();
             case JSON:
                 return new JsonSerialization();
+            case PROTOSTUFF:
+                return new ProtostuffSerialization();
+            case KRYO:
+                return new KryoSerialization();
+            case XML:
+                return new XmlSerialization();
             default:
                 throw new IllegalArgumentException("serialization type is illegal");
         }

@@ -15,7 +15,7 @@ public class RpcFuture<T> implements Future<T> {
     private T response;
 
     /**
-     * 因为请求和响应是一一对应的，所以这里是1
+     * 因为请求和响应是一一对应的，所以这里是 1
      * 使用 CountDownLatch 等待线程
      */
     private final CountDownLatch countDownLatch = new CountDownLatch(1);
@@ -25,14 +25,13 @@ public class RpcFuture<T> implements Future<T> {
         return false;
     }
 
-
     @Override
     public boolean isCancelled() {
         return false;
     }
 
     /**
-     *  响应数据不为空 表示完成
+     *  响应数据不为空表示完成
      */
     @Override
     public boolean isDone() {
@@ -40,11 +39,11 @@ public class RpcFuture<T> implements Future<T> {
     }
 
     /**
-     *  等待获取数据，直到有结果 也就是 countDownLatch 的值减到 0
+     *  等待获取数据，直到有结果，也就是 countDownLatch 的值减到 0
      */
     @Override
     public T get() throws InterruptedException {
-        // 进入阻塞等待 countDownLatch减少值为0 返回下面结果
+        // 进入阻塞等待 countDownLatch减少值为 0 返回下面结果
         countDownLatch.await();
         return response;
     }
@@ -59,7 +58,6 @@ public class RpcFuture<T> implements Future<T> {
         }
         return null;
     }
-
 
     public void setResponse(T response){
         this.response = response;

@@ -1,8 +1,8 @@
 package com.ktf.rpc.provider.service;
 
 import com.ktf.rpc.api.service.HelloRpcService;
-import com.ktf.rpc.api.service.HelloWordService;
 import com.ktf.rpc.server.annotation.RpcService;
+import org.springframework.stereotype.Service;
 
 /**
  * @author github.com/kuangtf

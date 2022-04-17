@@ -16,7 +16,7 @@ public class MessageHeader implements Serializable {
 
     /*
     +---------------------------------------------------------------+
-    | 魔数 2byte | 协议版本号 1byte | 序列化算法 1byte | 报文类型 1byte  |
+    | 魔数 2byte | 协议版本号 1byte | 序列化算法 1byte | 报文类型 1byte    |
     +---------------------------------------------------------------+
     | 状态 1byte |        消息 ID 32byte     |      数据长度 4byte     |
     +---------------------------------------------------------------+
@@ -59,13 +59,15 @@ public class MessageHeader implements Serializable {
     /**
      * 构建消息头
      */
-    public static MessageHeader build(String serialization){
+    public static MessageHeader build(String serialization, int msgLen){
         MessageHeader messageHeader = new MessageHeader();
         messageHeader.setMagic(ProtocolConstants.MAGIC);
         messageHeader.setVersion(ProtocolConstants.VERSION);
-        messageHeader.setRequestId(UUID.randomUUID().toString().replaceAll("-",""));
-        messageHeader.setMsgType(MsgType.REQUEST.getType());
         messageHeader.setSerialization(SerializationTypeEnum.parseByName(serialization).getType());
+        messageHeader.setMsgType(MsgType.REQUEST.getType());
+        messageHeader.setRequestId(UUID.randomUUID().toString().replaceAll("-",""));
+        messageHeader.setMsgLen(msgLen);
+        messageHeader.setStatus(MsgStatus.SUCCESS.getCode());
         return messageHeader;
     }
 }

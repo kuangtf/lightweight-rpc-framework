@@ -32,14 +32,12 @@ public class HessianSerialization implements RpcSerialization {
         } catch (Exception e) {
             throw new SerializationException(e);
         }
-
         return results;
     }
 
     /**
      *  反序列化
      */
-    @SuppressWarnings("unchecked")
     @Override
     public <T> T deserialize(byte[] bytes, Class<T> clz) {
         if (bytes == null) {
@@ -49,11 +47,10 @@ public class HessianSerialization implements RpcSerialization {
 
         try (ByteArrayInputStream is = new ByteArrayInputStream(bytes)) {
             HessianSerializerInput hessianInput = new HessianSerializerInput(is);
-            result = (T) hessianInput.readObject(clz);
+            result = clz.cast(hessianInput.readObject(clz));
         } catch (Exception e) {
             throw new SerializationException(e);
         }
-
         return result;
     }
 }

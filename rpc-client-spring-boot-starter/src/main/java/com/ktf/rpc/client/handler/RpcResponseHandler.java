@@ -1,6 +1,7 @@
 package com.ktf.rpc.client.handler;
 
 import com.ktf.rpc.client.cache.LocalRpcResponseCache;
+import com.ktf.rpc.core.common.RpcRequest;
 import com.ktf.rpc.core.common.RpcResponse;
 import com.ktf.rpc.core.protocol.MessageProtocol;
 import io.netty.channel.ChannelHandlerContext;
@@ -10,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @author github.com/kuangtf
  * @date 2021/10/13 21:35
- * 数据响应处理器
+ * 响应处理器，将获取的响应放入 LocalRpcResponseCache 中
  */
 @Slf4j
 public class RpcResponseHandler extends SimpleChannelInboundHandler<MessageProtocol<RpcResponse>> {

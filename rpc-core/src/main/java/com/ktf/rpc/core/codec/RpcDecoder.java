@@ -1,5 +1,6 @@
 package com.ktf.rpc.core.codec;
 
+import com.ktf.rpc.core.common.HeartBeat;
 import com.ktf.rpc.core.common.RpcRequest;
 import com.ktf.rpc.core.common.RpcResponse;
 import com.ktf.rpc.core.protocol.MessageHeader;
@@ -14,7 +15,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import lombok.extern.slf4j.Slf4j;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -41,10 +41,11 @@ public class RpcDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
 
-        // 可读的数据小于请求头总的大小 直接丢弃
+        // 可读的数据小于请求头总的大小，直接丢弃
         if (in.readableBytes() < ProtocolConstants.HEADER_TOTAL_LEN) {
             return;
         }
+
         // 标记 ByteBuf 读指针位置
         in.markReaderIndex();
 
@@ -54,6 +55,7 @@ public class RpcDecoder extends ByteToMessageDecoder {
             throw new IllegalArgumentException("magic number is illegal, " + magic);
         }
 
+        // 注意，这里必须要按照协议头的顺序读取对应大小的数据，否则可能就会乱码
         // 协议号版本
         byte version = in.readByte();
         // 序列化算法
@@ -62,12 +64,12 @@ public class RpcDecoder extends ByteToMessageDecoder {
         byte msgType = in.readByte();
         // 状态
         byte status = in.readByte();
-        // 消息 ID（直接从 ByteBuf 中获取20各个字节的数据作为请求 ID）
+        // 消息 ID（直接从 ByteBuf 中获取 32 个字节的数据作为请求 ID）
         CharSequence requestId = in.readCharSequence(ProtocolConstants.REQ_LEN, StandardCharsets.UTF_8);
-        // 数据长度
+        // 数据长度，即读取所有剩下的可读字符
         int dataLength = in.readInt();
         if (in.readableBytes() < dataLength) {
-            // 可读的数据长度小于请求体长度 直接丢弃并重置 读指针位置
+            // 可读的数据长度小于请求体长度直接丢弃并重置读指针位置
             in.resetReaderIndex();
             return;
         }
@@ -78,15 +80,16 @@ public class RpcDecoder extends ByteToMessageDecoder {
         if (msgTypeEnum == null) {
             return;
         }
-        // 封装消息头
+        // 封装消息头，这个头可以是请求也可以是响应
         MessageHeader header = new MessageHeader();
         header.setMagic(magic);
         header.setVersion(version);
         header.setSerialization(serializeType);
+        header.setMsgType(msgType);
         header.setStatus(status);
         header.setRequestId(String.valueOf(requestId));
-        header.setMsgType(msgType);
         header.setMsgLen(dataLength);
+
         // 序列化对象
         RpcSerialization rpcSerialization = SerializationFactory.getRpcSerialization(SerializationTypeEnum.parseByType(serializeType));
         // 根据消息类型进行相应的反序列化
@@ -108,6 +111,17 @@ public class RpcDecoder extends ByteToMessageDecoder {
                     protocol.setBody(response);
                     out.add(protocol);
                 }
+                break;
+            case HEARTBEAT:
+                HeartBeat heartBeat = rpcSerialization.deserialize(data, HeartBeat.class);
+                if (heartBeat != null) {
+                    MessageProtocol<HeartBeat> protocol = new MessageProtocol<>();
+                    protocol.setHeader(header);
+                    protocol.setBody(heartBeat);
+                    out.add(protocol);
+                }
+                break;
+            default:
                 break;
         }
     }

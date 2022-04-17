@@ -3,7 +3,7 @@ package com.ktf.rpc.core.common;
 /**
  * @author github.com/kuangtf
  * @date 2021/10/14 17:22
- * 格式话服务和版本的名称
+ * 格式化服务和版本的名称
  */
 public class ServiceUtil {
 

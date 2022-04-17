@@ -1,8 +1,8 @@
 package com.ktf.rpc.server.config;
 
 import com.ktf.rpc.core.register.RegistryService;
-import com.ktf.rpc.core.register.ZookeeperRegistryService;
-import com.ktf.rpc.server.RpcServerProvider;
+import com.ktf.rpc.core.register.ZookeeperRegistryServiceImpl;
+import com.ktf.rpc.server.processor.RpcServerProcessor;
 import com.ktf.rpc.server.transport.NettyRpcServer;
 import com.ktf.rpc.server.transport.RpcServer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,31 +23,31 @@ public class RpcServerAutoConfiguration {
     private RpcServerProperties properties;
 
     /**
-     * 创建一个服务注册实体到 IOC 容器中
+     * 创建服务注册 bean
      */
     @Bean
     @ConditionalOnMissingBean
     public RegistryService registryService() {
-        return new ZookeeperRegistryService(properties.getRegistryAddr());
+        return new ZookeeperRegistryServiceImpl(properties.getRegistryAddr());
     }
 
     /**
-     * 创建一个服务端的 Netty 传输类实体到 IOC 容器中
+     * 创建 NettyRpcServer bean
      */
     @Bean
-    @ConditionalOnMissingBean(RpcServer.class)
-    RpcServer RpcServer() {
+    @ConditionalOnMissingBean
+    RpcServer rpcServer() {
         return new NettyRpcServer();
     }
 
     /**
-     * 创建一个服务提供者实体到 IOC 容器中
+     * 创建 RpcServerProvider bean
      */
     @Bean
-    @ConditionalOnMissingBean(RpcServerProvider.class)
-    RpcServerProvider rpcServerProvider(@Autowired RegistryService registryService,
-                                        @Autowired RpcServer rpcServer,
-                                        @Autowired RpcServerProperties rpcServerProperties){
-        return new RpcServerProvider(registryService, rpcServer, rpcServerProperties);
+    @ConditionalOnMissingBean
+    RpcServerProcessor rpcServerProvider(@Autowired RegistryService registryService,
+                                         @Autowired RpcServer rpcServer,
+                                         @Autowired RpcServerProperties rpcServerProperties){
+        return new RpcServerProcessor(registryService, rpcServer, rpcServerProperties);
     }
 }

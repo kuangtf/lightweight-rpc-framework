@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @author github.com/kuangtf
  * @date 2021/10/14 17:22
- * 客户端传输工厂
+ * 客户端传输类工厂
  */
 @Slf4j
 public class NetClientTransportFactory {

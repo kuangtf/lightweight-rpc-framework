@@ -10,13 +10,12 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import lombok.extern.slf4j.Slf4j;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
  * @author github.com/kuangtf
  * @date 2021/10/14 17:22
- * 自定义编码器
+ * 自定义编码器，可以解决拆粘包问题
  */
 @Slf4j
 public class RpcEncoder<T> extends MessageToByteEncoder<MessageProtocol<T>> {
@@ -33,36 +32,37 @@ public class RpcEncoder<T> extends MessageToByteEncoder<MessageProtocol<T>> {
      *
      */
     @Override
-    protected void encode(ChannelHandlerContext channelHandlerContext, MessageProtocol<T> messageProtocol, ByteBuf byteBuf) throws Exception {
+    protected void encode(ChannelHandlerContext channelHandlerContext, MessageProtocol<T> messageProtocol, ByteBuf out) throws Exception {
+
         // 获取消息头
         MessageHeader header = messageProtocol.getHeader();
 
         // 魔数
-        byteBuf.writeShort(header.getMagic());
+        out.writeShort(header.getMagic());
 
         // 协议版本号
-        byteBuf.writeByte(header.getVersion());
+        out.writeByte(header.getVersion());
 
         // 序列化算法
-        byteBuf.writeByte(header.getSerialization());
+        out.writeByte(header.getSerialization());
 
         // 报文类型
-        byteBuf.writeByte(header.getMsgType());
+        out.writeByte(header.getMsgType());
 
         // 状态
-        byteBuf.writeByte(header.getStatus());
+        out.writeByte(header.getStatus());
 
         // 消息 ID
-        byteBuf.writeCharSequence(header.getRequestId(), StandardCharsets.UTF_8);
+        out.writeCharSequence(header.getRequestId(), StandardCharsets.UTF_8);
 
         // 根据消息头中的序列化算法选择对应的序列化方式对消息体进行序列化
         RpcSerialization rpcSerialization = SerializationFactory.getRpcSerialization(SerializationTypeEnum.parseByType(header.getSerialization()));
         byte[] data = rpcSerialization.serialize(messageProtocol.getBody());
 
         // 数据长度
-        byteBuf.writeInt(data.length);
+        out.writeInt(data.length);
 
         // 数据内容
-        byteBuf.writeBytes(data);
+        out.writeBytes(data);
     }
 }

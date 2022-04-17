@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author github.com/kuangtf
  * @date 2021/10/14 17:22
- * 客户端传输层
+ * 客户端传输类
  */
 @Slf4j
 public class NettyNetClientTransport implements NetClientTransport {
@@ -31,6 +31,9 @@ public class NettyNetClientTransport implements NetClientTransport {
     private final EventLoopGroup eventLoopGroup;
     private final RpcResponseHandler handler;
 
+    /**
+     * Netty 编程中一般的固定写法
+     */
     public NettyNetClientTransport() {
         bootstrap = new Bootstrap();
         eventLoopGroup = new NioEventLoopGroup(4);
@@ -52,13 +55,12 @@ public class NettyNetClientTransport implements NetClientTransport {
 
     @Override
     public MessageProtocol<RpcResponse> sendRequest(RequestMetadata metadata) throws Exception {
-        // 请求的消息协议类型
+        // 请求格式
         MessageProtocol<RpcRequest> protocol = metadata.getProtocol();
         // 异步返回结果
         RpcFuture<MessageProtocol<RpcResponse>> future = new RpcFuture<>();
         // 将请求 id 和对应的异步返回结果缓存起来
         LocalRpcResponseCache.add(protocol.getHeader().getRequestId(), future);
-
         // 使用 netty 连接到服务端
         ChannelFuture channelFuture = bootstrap.connect(metadata.getAddress(), metadata.getPort()).sync();
         // 添加回调函数，在连接之后执行
